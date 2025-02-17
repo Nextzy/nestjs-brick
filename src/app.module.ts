@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { InfrastructureModule } from './infrastructure/infrastructure.module';
 import { ConfigModule } from '@nestjs/config';
 import config from './infrastructure/config/config';
+import { V1Module } from './interfaces/http/v1/v1.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import config from './infrastructure/config/config';
       isGlobal: true,
     }),
     InfrastructureModule, // Import the InfrastructureModule to make DB and other infrastructure available
+    V1Module,
   ],
   controllers: [AppController],
   providers: [AppService],

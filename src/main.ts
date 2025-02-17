@@ -12,10 +12,10 @@ async function bootstrap() {
     type: VersioningType.URI, // Use /v1, /v2 in URL
   });
 
-  app.enableVersioning({
-    type: VersioningType.HEADER,
-    header: 'X-API-Version',
-  });
+  // app.enableVersioning({
+  //   type: VersioningType.HEADER,
+  //   header: 'X-API-Version',
+  // });
 
   await app.listen(process.env.PORT ?? 3000);
 }
