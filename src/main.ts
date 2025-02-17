@@ -1,8 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableVersioning({
+    type: VersioningType.URI, // ใช้ /v1, /v2 ใน URL
+  });
+
+  app.enableVersioning({
+    type: VersioningType.HEADER,
+    header: 'X-API-Version',
+  });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
