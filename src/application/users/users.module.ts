@@ -7,6 +7,7 @@ import { GetAllUsersHandler } from './queries/get-all-users.handler';
 import { GetUserByIdHandler } from './queries/get-user-by-id.handler';
 import { CreateUserHandler } from './commands/create-user.handler';
 import { UpdateUserHandler } from './commands/update-user.handler';
+import { UserEventHandler } from './events/handlers/user-event.handler';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), CqrsModule],
@@ -16,6 +17,7 @@ import { UpdateUserHandler } from './commands/update-user.handler';
     GetUserByIdHandler,
     CreateUserHandler,
     UpdateUserHandler,
+    UserEventHandler,
   ],
   exports: [UsersService],
 })

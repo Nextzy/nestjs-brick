@@ -141,3 +141,29 @@ user.controller.ts: คอนโทรลเลอร์ที่จัดกา
 create-user.dto.ts: DTO สำหรับการสร้างผู้ใช้ใหม่
 user.commands.ts: Commands สำหรับการดำเนินการที่เกี่ยวกับผู้ใช้ (เช่น สร้างผู้ใช้, ลบบัญชีผู้ใช้)
 user.queries.ts: Queries สำหรับการดึงข้อมูลผู้ใช้ (เช่น การค้นหาผู้ใช้)
+
+
+📂 src/
+ ├── 📂 application/               # Business Use Cases (Application Layer)
+ │   ├── 📂 users/                 # Feature: Users
+ │   │   ├── 📂 services/          # Application Services for Users
+ │   │   ├── 📂 dto/               # DTOs for Users
+ │   │   ├── 📂 events/            # Domain Events for Users
+ │   │   ├── 📂 commands/          # Application Commands for Users (CQRS)
+ │   │   ├── 📂 queries/           # Query Handlers for Users (CQRS)
+ │   │   └── users.module.ts       # Users Module (NestJS Module)
+ │   │
+ │   ├── 📂 products/              # Feature: Products
+ │   │   ├── 📂 services/          # Application Services for Products
+ │   │   ├── 📂 dto/               # DTOs for Products
+ │   │   ├── 📂 events/            # Domain Events for Products
+ │   │   ├── 📂 commands/          # Application Commands for Products (CQRS)
+ │   │   ├── 📂 queries/           # Query Handlers for Products (CQRS)
+ │   │   └── products.module.ts    # Products Module (NestJS Module)
+ │   │
+ │   └── app.module.ts             # Root Application Module (or imports features)
+ │
+ ├── 📂 domain/                    # Core Business Logic (Domain Layer)
+ ├── 📂 infrastructure/            # Data Persistence & External Services
+ ├── 📂 interfaces/                # API & External Interfaces
+ └── main.ts                       # Entry Point (Bootstrap NestJS)
