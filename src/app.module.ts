@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import config from './infrastructure/config/config';
 import { V1Module } from './interfaces/http/v1/v1.module';
 import { V2Module } from './interfaces/http/v2/v2.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 @Module({
   imports: [
@@ -18,6 +20,12 @@ import { V2Module } from './interfaces/http/v2/v2.module';
     V2Module,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor, // Apply the logging interceptor globally
+    },
+  ],
 })
 export class AppModule {}
