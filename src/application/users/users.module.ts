@@ -8,9 +8,10 @@ import { GetUserByIdHandler } from './queries/get-user-by-id.handler';
 import { CreateUserHandler } from './commands/create-user.handler';
 import { UpdateUserHandler } from './commands/update-user.handler';
 import { UserEventHandler } from './events/handlers/user-event.handler';
+import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), CqrsModule],
+  imports: [TypeOrmModule.forFeature([User]), CqrsModule, InfrastructureModule],
   providers: [
     UsersService,
     GetAllUsersHandler,
