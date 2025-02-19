@@ -1,19 +1,56 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-  HttpException,
-  ExceptionFilter,
-  Catch,
-} from '@nestjs/common';
-import { Observable, throwError } from 'rxjs';
+import { Injectable } from '@nestjs/common';
+import { NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import * as moment from 'moment';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    // Check if the request is gRPC
+    const isGrpcRequest = context.switchToRpc;
+
+    if (isGrpcRequest) {
+      const grpcContext = context.switchToRpc();
+      
+      const args = grpcContext['args'];
+
+      const logData = {
+        eventtime: moment().toISOString(),
+        tranid: 'N/A',
+        reqtime: moment().toISOString(),
+        source: 'N/A',
+        system: 'N/A',
+        service: 'nestjs-backend-template',
+        method: grpcContext['contextType'] || 'N/A',
+        loglvl: 'INFO',
+        caller: args[2]?.path || 'N/A',
+        msgdata: 'Request processed successfully',
+      };
+
+      console.log(JSON.stringify(logData));
+
+      return next.handle().pipe(
+        tap((data) => {
+          logData.msgdata = `Response Data: ${JSON.stringify(data)}`;
+          console.log(JSON.stringify(logData));
+        }),
+        catchError((error) => {
+          const errorLogData = {
+            ...logData,
+            loglvl: 'ERROR',
+            msgdata: `Error occurred: ${error.message}`,
+          };
+
+          console.error(JSON.stringify(errorLogData));
+
+          return throwError(error);
+        }),
+      );
+    }
+
+    // Default behavior for HTTP requests
     const request = context.switchToHttp().getRequest();
     const { method, url, headers, body } = request;
 
@@ -30,14 +67,13 @@ export class LoggingInterceptor implements NestInterceptor {
       method: method,
       loglvl: 'INFO',
       caller: `${request.originalUrl} ${method}`,
-      msgdata: 'Request processed successfully', // Customize the message as needed
+      msgdata: 'Request processed successfully',
     };
 
     console.log(JSON.stringify(logData));
 
     return next.handle().pipe(
       tap((data) => {
-        // Optionally log response data here, if necessary
         logData.msgdata = `Response Data: ${JSON.stringify(data)}`;
         console.log(JSON.stringify(logData));
       }),
@@ -46,7 +82,6 @@ export class LoggingInterceptor implements NestInterceptor {
           ...logData,
           loglvl: 'ERROR',
           msgdata: `Error occurred: ${error.message}`,
-          // stack: error.stack,
         };
 
         console.error(JSON.stringify(errorLogData));
