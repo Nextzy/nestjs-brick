@@ -21,7 +21,7 @@ async function bootstrap() {
   //   header: 'X-API-Version',
   // });
 
-  await app.listen(process.env.PORT ?? 3001);
+  await app.listen(process.env.PORT ?? 3000);
 
   // Start gRPC Service
   const HOST = process.env.HOST || 'localhost';

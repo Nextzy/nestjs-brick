@@ -11,6 +11,7 @@ export const ormConfig: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME || 'user',
   password: process.env.DB_PASSWORD || 'password',
   database: process.env.DB_NAME || 'dbname',
+  schema: process.env.DB_SCHEMA || 'public',
   synchronize: false, // Set to false in production
   logging: true,
   entities: [path.join(__dirname, '../../domain/entities/*.entity{.ts,.js}')],

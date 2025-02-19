@@ -7,9 +7,14 @@ import * as moment from 'moment';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
+  private readonly excludedRoutes = [
+    { path: '/health/liveness', method: 'GET' },
+    { path: '/health/readiness', method: 'GET' },
+  ];
+
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    // Check if the request is gRPC
-    const isGrpcRequest = context.switchToRpc;
+
+    const isGrpcRequest = context.getType() === 'rpc';
 
     if (isGrpcRequest) {
       const grpcContext = context.switchToRpc();
@@ -54,6 +59,10 @@ export class LoggingInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
     const { method, url, headers, body } = request;
 
+    if (this.isExcluded(request)) {
+      return next.handle();
+    }
+
     const eventTime = moment().format('YYYY-MM-DD HH:mm:ss:SSS');
 
     const logData = {
@@ -88,6 +97,13 @@ export class LoggingInterceptor implements NestInterceptor {
 
         return throwError(error);
       }),
+    );
+  }
+
+  private isExcluded(req: any): boolean {
+    return this.excludedRoutes.some(
+      (route) =>
+        route.path === req.url && route.method === req.method,
     );
   }
 }

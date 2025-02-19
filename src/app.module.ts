@@ -1,4 +1,4 @@
-import { Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { InfrastructureModule } from './infrastructure/infrastructure.module';
@@ -9,6 +9,7 @@ import { V2Module } from './interfaces/http/v2/v2.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { GrpcModule } from './interfaces/grpc/grpc.module';
+import { AuthMiddleware } from './common/middleware/auth.middleware';
 
 @Module({
   imports: [
@@ -31,5 +32,10 @@ import { GrpcModule } from './interfaces/grpc/grpc.module';
   ],
 })
 export class AppModule implements NestModule {
-  configure() {}
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).exclude(
+      { path: 'health/liveness', method: RequestMethod.GET },
+      { path: 'health/readiness', method: RequestMethod.GET },
+    ).forRoutes('*');
+  }
 }
