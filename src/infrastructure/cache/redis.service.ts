@@ -29,7 +29,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   }
 
   onModuleInit() {
-    console.log('✅ Redis Connected');
+    console.log('Redis Connected');
   }
 
   async onModuleDestroy() {
