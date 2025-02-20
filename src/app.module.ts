@@ -10,6 +10,8 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { GrpcModule } from './interfaces/grpc/grpc.module';
 import { AuthMiddleware } from './common/middleware/auth.middleware';
+import { RateLimitMiddleware } from './common/middleware/rate-limit.middleware';
+import { RedisService } from './infrastructure/cache/redis.service';
 
 @Module({
   imports: [
@@ -29,13 +31,16 @@ import { AuthMiddleware } from './common/middleware/auth.middleware';
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor, // Apply the logging interceptor globally
     },
+    RedisService,
   ],
+  exports: [RedisService]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).exclude(
-      { path: 'health/liveness', method: RequestMethod.GET },
-      { path: 'health/readiness', method: RequestMethod.GET },
-    ).forRoutes('*');
+    // consumer.apply(AuthMiddleware).exclude(
+    //   { path: 'health/liveness', method: RequestMethod.GET },
+    //   { path: 'health/readiness', method: RequestMethod.GET },
+    // ).forRoutes('*');
+    consumer.apply(RateLimitMiddleware).forRoutes('*');
   }
 }
