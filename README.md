@@ -7,8 +7,10 @@ This project follows the **Domain-Driven Design (DDD)** principles with **NestJS
 
 ## 📂 Project Structure
 ```plaintext
+📂 proto/                    # Protobuf definitions for gRPC communication
+ ├──*.proto
 📂 src/
- ├── 📂 application/          # Business Use Cases (Application Layer)
+ ├── 📂 application/         # Business Use Cases (Application Layer)
  │   ├── 📂 services/        # Application Services
  │   ├── 📂 dto/             # Data Transfer Objects (DTOs)
  │   ├── 📂 events/          # Domain Events
@@ -24,11 +26,12 @@ This project follows the **Domain-Driven Design (DDD)** principles with **NestJS
  │   └── domain.module.ts
  │
  ├── 📂 infrastructure/      # Data Persistence & External Services
- │   ├── 📂 repositories/    # Repository Implementations
- │   ├── 📂 orm/             # ORM Configurations (TypeORM, Prisma, etc.)
- │   ├── 📂 messaging/       # Event-driven messaging (Kafka, RabbitMQ)
  │   ├── 📂 cache/           # Redis Caching
  │   ├── 📂 config/          # Configuration Settings
+ │   ├── 📂 messaging/       # Event-driven messaging (Kafka, RabbitMQ)
+ │   ├── 📂 orm/             # ORM Configurations (TypeORM, Prisma, etc.)
+ │   ├── 📂 repositories/    # Repository Implementations
+ │   ├── 📂 utils/           # Utility functions and helper methods
  │   └── infrastructure.module.ts
  │
  ├── 📂 interfaces/          # API & External Interfaces
@@ -43,9 +46,24 @@ This project follows the **Domain-Driven Design (DDD)** principles with **NestJS
  │   │   │   ├── v2.module.ts
  │   │   ├── http.module.ts
  │   ├── 📂 grpc/            # gRPC Handlers
+ │   │   │   ├── grpc.module.ts
+ │   │   │   ├── user.controller.ts
+ │   │   │   ├── user.interface.ts
  │   ├── 📂 ws/              # WebSocket Handlers
  │   ├── 📂 cli/             # CLI Commands
  │   └── interface.module.ts
+ │
+ ├── 📂 common/              # Common utilities and shared functionalities
+ │   ├── 📂 filters/         # Global and exception filters
+ │   │   │   ├── all-exception.filter.ts
+ │   ├── 📂 interceptors/    # Interceptors for modifying request/response behavior
+ │   │   │   ├── logging.interceptor.ts
+ │   ├── 📂 middleware/      # Middleware for request processing and validation
+ │   │   │   ├── auth.middleware.ts.ts
+ │   │   │   ├── header-validation.middleware.ts
+ │   │   │   ├── rate-limit.middleware.ts
+ │
+ ├── 📂 migrations/          # Migrations database
  │
  ├── main.ts                 # Entry Point
  ├── app.module.ts           # Root Application Module
