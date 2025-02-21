@@ -67,8 +67,10 @@ This project follows the **Domain-Driven Design (DDD)** principles with **NestJS
  │
  ├── main.ts                 # Entry Point
  ├── app.module.ts           # Root Application Module
- ├── config.ts               # Configuration Loader
- ├── tsconfig.json           # TypeScript Configurations
+ │
+├── ormconfig.ts            # ORM Configurations for Migrations
+├── Dockerfile              # Dockerfile
+├── tsconfig.json           # TypeScript Configurations
 ```
 
 ---
