@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "prebuild": "rm -rf dist",
+    "build": "nest build && mkdir -p dist/common/i18n/locales && cp -r src/common/i18n/locales/* dist/common/i18n/locales/",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -36,6 +37,7 @@
     "@nestjs/typeorm": "^11.0.0",
     "bcrypt": "^5.1.1",
     "cache-manager-redis-store": "^3.0.1",
+    "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",

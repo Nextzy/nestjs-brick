@@ -27,7 +27,7 @@ export class RateLimitMiddleware implements NestMiddleware {
 
     if (currentCount > this.LIMIT) {
       throw new BadRequestException(
-        'Too many requests. Please try again later.',
+        'error.rate_imit',
       );
     }
 

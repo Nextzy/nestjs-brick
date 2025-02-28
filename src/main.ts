@@ -4,8 +4,8 @@ import { VersioningType } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
-import { GrpcModule } from './interfaces/grpc/grpc.module';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
+import { I18nService } from './common/i18n/i18n.service';
 
 dotenv.config(); // Load environment variables
 
@@ -13,7 +13,9 @@ async function bootstrap() {
   // Start REST API
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalFilters(new AllExceptionFilter());
+  const i18nService = app.get(I18nService);
+  
+  app.useGlobalFilters(new AllExceptionFilter(i18nService));
 
   app.enableVersioning({
     type: VersioningType.URI, // Use /v1, /v2 in URL

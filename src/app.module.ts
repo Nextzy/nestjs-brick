@@ -13,6 +13,8 @@ import { AuthMiddleware } from './common/middleware/auth.middleware';
 import { RateLimitMiddleware } from './common/middleware/rate-limit.middleware';
 import { RedisService } from './infrastructure/cache/redis.service';
 import { HeaderValidationMiddleware } from './common/middleware/header-validation.middleware';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { I18nService } from './common/i18n/i18n.service';
 
 @Module({
   imports: [
@@ -32,7 +34,12 @@ import { HeaderValidationMiddleware } from './common/middleware/header-validatio
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor, // Apply the logging interceptor globally
     },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    },
     RedisService,
+    I18nService,
   ],
   exports: [RedisService]
 })
@@ -43,6 +50,6 @@ export class AppModule implements NestModule {
     //   { path: 'health/readiness', method: RequestMethod.GET },
     // ).forRoutes('*');
     consumer.apply(RateLimitMiddleware).forRoutes('*');
-    consumer.apply(HeaderValidationMiddleware).forRoutes('*');
+    // consumer.apply(HeaderValidationMiddleware).forRoutes('*');
   }
 }

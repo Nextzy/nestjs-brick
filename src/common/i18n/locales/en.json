@@ -1,0 +1,12 @@
+{
+  "success": {
+    "operation_completed": "Operation completed successfully.",
+    "data_saved": "Data has been saved successfully."
+  },
+  "error": {
+    "not_found": "Resource not found.",
+    "unauthorized": "You are not authorized to perform this action.",
+    "server_error": "An unexpected error occurred.",
+    "rate_imit" : "Too many requests. Please try again later."
+  }
+}
