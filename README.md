@@ -1,7 +1,7 @@
 # 🚀 NestJS Project Structure with Domain-Driven Design (DDD) & API Versioning
 
 ## 📌 Project Overview
-This project follows the **Domain-Driven Design (DDD)** principles with **NestJS**, ensuring a scalable and maintainable backend architecture. It also supports **API Versioning** to handle multiple API versions efficiently.
+This project follows **Domain-Driven Design (DDD)** principles with **NestJS**, ensuring a scalable and maintainable backend architecture. It also supports **API Versioning** to handle multiple API versions efficiently.
 
 ---
 
@@ -9,6 +9,8 @@ This project follows the **Domain-Driven Design (DDD)** principles with **NestJS
 ```plaintext
 📂 proto/                    # Protobuf definitions for gRPC communication
  ├──*.proto
+📂 script/                   # For generating localized messages (i18n)
+ ├── localization.js
 📂 src/
  ├── 📂 application/         # Business Use Cases (Application Layer)
  │   ├── 📂 services/        # Application Services
@@ -46,24 +48,29 @@ This project follows the **Domain-Driven Design (DDD)** principles with **NestJS
  │   │   │   ├── v2.module.ts
  │   │   ├── http.module.ts
  │   ├── 📂 grpc/            # gRPC Handlers
- │   │   │   ├── grpc.module.ts
- │   │   │   ├── user.controller.ts
- │   │   │   ├── user.interface.ts
+ │   │   ├── grpc.module.ts
+ │   │   ├── user.controller.ts
+ │   │   ├── user.interface.ts
  │   ├── 📂 ws/              # WebSocket Handlers
  │   ├── 📂 cli/             # CLI Commands
  │   └── interface.module.ts
  │
  ├── 📂 common/              # Common utilities and shared functionalities
  │   ├── 📂 filters/         # Global and exception filters
- │   │   │   ├── all-exception.filter.ts
+ │   │   ├── all-exception.filter.ts
+ │   ├── 📂 i18n/            # Localized messages (i18n)
+ │   │   ├── 📂 locales/
+ │   │   │   ├── en.json
+ │   │   │   ├── th.json
+ │   │   ├── i18n.service.ts
  │   ├── 📂 interceptors/    # Interceptors for modifying request/response behavior
- │   │   │   ├── logging.interceptor.ts
+ │   │   ├── logging.interceptor.ts
  │   ├── 📂 middleware/      # Middleware for request processing and validation
- │   │   │   ├── auth.middleware.ts.ts
- │   │   │   ├── header-validation.middleware.ts
- │   │   │   ├── rate-limit.middleware.ts
+ │   │   ├── auth.middleware.ts
+ │   │   ├── header-validation.middleware.ts
+ │   │   ├── rate-limit.middleware.ts
  │
- ├── 📂 migrations/          # Migrations database
+ ├── 📂 migrations/          # Database migrations
  │
  ├── main.ts                 # Entry Point
  ├── app.module.ts           # Root Application Module
@@ -115,12 +122,31 @@ export class UsersV2Controller {
 
 ---
 
-## 🛠️ Technologies Used
-- **NestJS** - Scalable Node.js Framework
-- **TypeORM/Prisma** - Database ORM
-- **Kafka / RabbitMQ** - Event-Driven Messaging
-- **Redis** - Caching Layer
-- **GraphQL / REST API** - API Layer
+## 🛠️ Running Migrations
+### Generate a New Migration
+```sh
+npm run migration:generate -- -n MigrationName
+```
+
+### Run Migrations
+```sh
+npm run migration:run
+```
+
+### Revert Last Migration
+```sh
+npm run migration:revert
+```
+
+---
+
+## 🌍 Running Localization (i18n)
+To generate localized messages:
+```sh
+npm run localize
+```
+
+This executes the script `localization.js` inside the `script/` directory, processing and updating i18n files in `common/i18n/locales/`.
 
 ---
 
@@ -147,43 +173,19 @@ GET /v2/users
 
 ---
 
+## 🛠️ Technologies Used
+- **NestJS** - Scalable Node.js Framework
+- **TypeORM/Prisma** - Database ORM
+- **Kafka / RabbitMQ** - Event-Driven Messaging
+- **Redis** - Caching Layer
+- **GraphQL / REST API** - API Layer
+
+---
+
 ## 📌 Summary
-✅ **Modular Structure** - Scalable & Maintainable
-✅ **DDD Principles** - Focusing on Business Logic
-✅ **API Versioning** - Supports multiple API versions
-✅ **Event-Driven Architecture** - Kafka/RabbitMQ ready
-
-
-
-Users Feature:
-user.service.ts: บริการสำหรับการจัดการบัญชีผู้ใช้
-user.controller.ts: คอนโทรลเลอร์ที่จัดการ API ที่เกี่ยวกับผู้ใช้
-create-user.dto.ts: DTO สำหรับการสร้างผู้ใช้ใหม่
-user.commands.ts: Commands สำหรับการดำเนินการที่เกี่ยวกับผู้ใช้ (เช่น สร้างผู้ใช้, ลบบัญชีผู้ใช้)
-user.queries.ts: Queries สำหรับการดึงข้อมูลผู้ใช้ (เช่น การค้นหาผู้ใช้)
-
-
-📂 src/
- ├── 📂 application/               # Business Use Cases (Application Layer)
- │   ├── 📂 users/                 # Feature: Users
- │   │   ├── 📂 services/          # Application Services for Users
- │   │   ├── 📂 dto/               # DTOs for Users
- │   │   ├── 📂 events/            # Domain Events for Users
- │   │   ├── 📂 commands/          # Application Commands for Users (CQRS)
- │   │   ├── 📂 queries/           # Query Handlers for Users (CQRS)
- │   │   └── users.module.ts       # Users Module (NestJS Module)
- │   │
- │   ├── 📂 products/              # Feature: Products
- │   │   ├── 📂 services/          # Application Services for Products
- │   │   ├── 📂 dto/               # DTOs for Products
- │   │   ├── 📂 events/            # Domain Events for Products
- │   │   ├── 📂 commands/          # Application Commands for Products (CQRS)
- │   │   ├── 📂 queries/           # Query Handlers for Products (CQRS)
- │   │   └── products.module.ts    # Products Module (NestJS Module)
- │   │
- │   └── app.module.ts             # Root Application Module (or imports features)
- │
- ├── 📂 domain/                    # Core Business Logic (Domain Layer)
- ├── 📂 infrastructure/            # Data Persistence & External Services
- ├── 📂 interfaces/                # API & External Interfaces
- └── main.ts                       # Entry Point (Bootstrap NestJS)
+✅ **Modular Structure** - Scalable & Maintainable  
+✅ **DDD Principles** - Focusing on Business Logic  
+✅ **API Versioning** - Supports multiple API versions  
+✅ **Event-Driven Architecture** - Kafka/RabbitMQ ready  
+✅ **Internationalization (i18n)** - Multi-language support  
+✅ **Database Migrations** - Easily manage schema changes
