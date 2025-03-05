@@ -5,6 +5,7 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "type": "module",
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "nest build && mkdir -p dist/common/i18n/locales && cp -r src/common/i18n/locales/* dist/common/i18n/locales/",
@@ -22,7 +23,8 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "migration:generate": "npm run typeorm migration:generate -- -d ormconfig.ts",
     "migration:run": "npm run typeorm migration:run -- -d ormconfig.ts",
-    "migration:revert": "npm run typeorm migration:revert -- -d ormconfig.ts"
+    "migration:revert": "npm run typeorm migration:revert -- -d ormconfig.ts",
+    "localize": "node ./script/localization.js"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.12.6",
@@ -35,10 +37,12 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/throttler": "^6.4.0",
     "@nestjs/typeorm": "^11.0.0",
+    "axios": "^1.8.1",
     "bcrypt": "^5.1.1",
     "cache-manager-redis-store": "^3.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "csv-parser": "^3.2.0",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "google-protobuf": "^3.21.4",
