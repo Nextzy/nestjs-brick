@@ -1,11 +1,10 @@
 {
-  "name": "nestjs-backend-template",
+  "name": "nestjs-brick",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
-  "type": "module",
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "nest build && mkdir -p dist/common/i18n/locales && cp -r src/common/i18n/locales/* dist/common/i18n/locales/",
